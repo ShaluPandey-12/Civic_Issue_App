@@ -1,12 +1,9 @@
-// Genkit AI development server entry point
-// Referenced by package.json: "genkit:dev": "genkit start -- tsx src/ai/dev.ts"
-// TODO: Add Genkit AI flows for image analysis, duplicate detection, and chatbot
 
-import { genkit } from "genkit";
-import { googleAI } from "@genkit-ai/googleai";
+import { config } from 'dotenv';
+config();
 
-const ai = genkit({
-  plugins: [googleAI()],
-});
-
-export default ai;
+// Ensure you have this file and it's correctly set up.
+// You can add your flows here.
+import '@/ai/flows/image-clarity-check';
+import '@/ai/flows/duplicate-issue-detection';
+import '@/ai/flows/chatbot-flow';
