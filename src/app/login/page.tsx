@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -128,3 +129,7 @@ export default function LoginPage() {
     </main>
   );
 }
+"use client"
+
+export { default } from '../page'
+
