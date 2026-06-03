@@ -103,6 +103,43 @@ You can use the following pre-seeded accounts to log in and test the different r
 
 ---
 
+## Project Status
+
+> ⚠️ **This project is under active development.** The repository currently contains the foundational scaffold — Firebase config, Genkit AI entry point, and the Next.js app shell. Core route implementations and UI components are in progress.
+
+**Current source structure:**
+
+```
+src/
+├── ai/dev.ts          # Genkit AI entry point
+├── app/
+│   ├── globals.css    # Global styles
+│   ├── layout.tsx     # Root layout
+│   └── page.tsx       # Entry page
+└── lib/
+    ├── firebase.ts    # Firebase initialization
+    └── utils.ts       # Utilities
+```
+
+**Planned (not yet implemented):**
+- Role-based dashboards: `/citizen`, `/admin`, `/head`, `/worker`
+- Shared component library (`src/components/`)
+- Genkit AI flows for duplicate detection, image clarity checks, and CivicBot
+
+Want to contribute? See [CONTRIBUTING.md](./CONTRIBUTING.md) to get started.
+
+---
+
+Also update the **Getting Started → Installation → Step 3** from:
+
+> The project is pre-configured to connect to a demo Firebase project. The configuration can be found in `src/lib/firebase.ts`. On the first run, the Firestore database will be automatically seeded with mock data.
+
+To:
+
+> Copy `.env.example` to `.env.local` and fill in your Firebase and Google AI credentials. See [CONTRIBUTING.md](./CONTRIBUTING.md) for step-by-step Firebase setup instructions.
+
+
+---
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
