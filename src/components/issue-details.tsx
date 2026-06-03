@@ -1,0 +1,152 @@
+
+
+'use client';
+
+import Image from 'next/image';
+import type { Issue, SlaStatus } from '@/lib/types';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Car,
+  Lightbulb,
+  Trash2,
+  MapPin,
+  Calendar,
+  User,
+  Droplets,
+  Construction,
+  TreePine,
+  Home,
+  Dog,
+  Cloudy,
+  Clock,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { format, parseISO } from 'date-fns';
+import { useState, useEffect } from 'react';
+import { useLanguage } from '@/hooks/use-language';
+
+// Component to prevent hydration mismatch for dates
+function SafeHydrate({ children }: { children: React.ReactNode }) {
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+  return isHydrated ? <>{children}</> : null;
+}
+
+
+const categoryIcons: Record<Issue['category'], React.ReactNode> = {
+  'Garbage & Waste Management Problems': <Trash2 className="h-4 w-4" />,
+  'Water Supply Quality': <Droplets className="h-4 w-4" />,
+  'Drainage Issues': <Droplets className="h-4 w-4" />,
+  'Roads, Footpaths & Infrastructure Damage': <Construction className="h-4 w-4" />,
+  'Streetlights & Electricity Failures': <Lightbulb className="h-4 w-4" />,
+  'Parks, Trees & Environmental Concerns': <TreePine className="h-4 w-4" />,
+  'Illegal Constructions & Encroachments': <Home className="h-4 w-4" />,
+  'Stray Animals & Public Health Hazards': <Dog className="h-4 w-4" />,
+  'Sanitation & Toiletry Issues': <Home className="h-4 w-4" />,
+  'Mosquito Control & Fogging': <Cloudy className="h-4 w-4" />,
+  'Pipeline Burst': <Droplets className="h-4 w-4" />,
+    'Road Accident': <Car className="h-4 w-4" />,
+    'Fire Hazard': <Lightbulb className="h-4 w-4" />,
+    'Medical Waste': <Trash2 className="h-4 w-4" />,
+    'Major Blockage': <Construction className="h-4 w-4" />,
+};
+
+const statusColors: Record<Issue['status'], string> = {
+  Submitted: 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/50 dark:text-blue-300 dark:border-blue-700',
+  'In Progress': 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/50 dark:text-yellow-300 dark:border-yellow-700',
+  Resolved: 'bg-green-100 text-green-800 border-green-300 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700',
+};
+
+const slaStatusColors: Record<SlaStatus, string> = {
+  'On Time': 'text-green-600',
+  'At Risk': 'text-yellow-600',
+  'Deadline Missed': 'text-red-600',
+  'Extended': 'text-blue-600',
+  'Escalated': 'text-purple-600',
+};
+
+
+export function IssueDetails({ issue }: { issue: Issue }) {
+  const { t } = useLanguage();
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex justify-between items-start">
+            <div>
+                <CardTitle className="text-2xl font-headline">{issue.title}</CardTitle>
+                <CardDescription className="mt-1">{issue.description}</CardDescription>
+            </div>
+            <Badge variant="outline" className={cn('text-sm', statusColors[issue.status])}>
+                {issue.status}
+            </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="relative aspect-video w-full">
+            <Image
+                src={issue.imageUrl}
+                alt={issue.title}
+                fill
+                className="rounded-lg object-cover"
+                data-ai-hint={issue.imageHint}
+            />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div className="flex items-start gap-2">
+                <div className="mt-1">{categoryIcons[issue.category]}</div>
+                <div>
+                    <p className="font-semibold">Category</p>
+                    <p className="text-muted-foreground">{issue.category}</p>
+                </div>
+            </div>
+            <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 mt-1" />
+                <div>
+                    <p className="font-semibold">Location</p>
+                    <p className="text-muted-foreground">{issue.location.lat.toFixed(4)}, {issue.location.lng.toFixed(4)}</p>
+                </div>
+            </div>
+            <div className="flex items-start gap-2">
+                <Calendar className="h-4 w-4 mt-1" />
+                <div>
+                    <p className="font-semibold">Submitted</p>
+                    <p className="text-muted-foreground">
+                      <SafeHydrate>
+                        {format(parseISO(issue.submittedAt), 'PPp')}
+                      </SafeHydrate>
+                    </p>
+                </div>
+            </div>
+             <div className="flex items-start gap-2">
+                <Clock className={cn("h-4 w-4 mt-1", slaStatusColors[issue.slaStatus])} />
+                <div>
+                    <p className="font-semibold">SLA Deadline</p>
+                    <p className={cn("text-muted-foreground", slaStatusColors[issue.slaStatus])}>
+                      <SafeHydrate>
+                        {format(parseISO(issue.slaDeadline), 'PPp')}
+                      </SafeHydrate>
+                    </p>
+                </div>
+            </div>
+            <div className="flex items-start gap-2">
+                <User className="h-4 w-4 mt-1" />
+                <div>
+                    <p className="font-semibold">Reporter</p>
+                    <p className="text-muted-foreground">{t(issue.submittedBy.nameKey)}</p>
+                </div>
+            </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
