@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
+import { BackButton } from '@/components/ui/back-button';
 import type { IssueCategory } from '@/lib/types';
 
 const standardCategories: IssueCategory[] = [
@@ -52,6 +53,9 @@ function ReportPageContent() {
 
   return (
     <div className="max-w-2xl mx-auto">
+      <div className="mb-4">
+        <BackButton href="/dashboard">Back</BackButton>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-headline">Report a New Issue</CardTitle>

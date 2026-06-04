@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Loader2, AlertTriangle } from 'lucide-react';
+import { BackButton } from '@/components/ui/back-button';
 import type { EmergencyCategory } from '@/lib/types';
 
 const emergencyCategories: EmergencyCategory[] = [
@@ -44,6 +45,9 @@ export default function EmergencyReportPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
+      <div className="mb-4">
+        <BackButton href="/dashboard">Back</BackButton>
+      </div>
       <Card className="border-destructive">
         <CardHeader>
           <CardTitle className="text-2xl font-headline flex items-center gap-2 text-destructive">

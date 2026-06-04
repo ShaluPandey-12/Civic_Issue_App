@@ -17,6 +17,7 @@ import { Sun, Moon, Laptop, Bell, Palette, User, CircleHelp, Mail, Phone, Messag
 import { useAuth } from '@/hooks/use-auth';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Link from 'next/link';
+import { BackButton } from '@/components/ui/back-button';
 import { useLanguage } from '@/hooks/use-language';
 
 export default function SettingsPage() {
@@ -26,6 +27,9 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
+      <div className="mb-2">
+        <BackButton href="/dashboard">Back</BackButton>
+      </div>
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight font-headline">
           {t('settings')}
