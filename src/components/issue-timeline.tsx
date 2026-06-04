@@ -9,11 +9,13 @@ import {
   Clock,
   FilePlus2,
   AlertTriangle,
+  UserCheck,
+  ArrowUpRight,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import Image from 'next/image';
 import { Button } from './ui/button';
-import { useState } from 'react';
+import { useState, type ChangeEvent, type ReactNode } from 'react';
 import {
   Select,
   SelectContent,
@@ -29,12 +31,68 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 
-const statusIcons: Record<string, React.ReactNode> = {
+const statusIcons: Record<string, ReactNode> = {
   'Submitted': <FilePlus2 className="h-5 w-5" />,
+  'Assigned': <UserCheck className="h-5 w-5 text-sky-500" />,
   'In Progress': <Clock className="h-5 w-5 text-yellow-500" />,
+  'Escalated': <ArrowUpRight className="h-5 w-5 text-purple-500" />,
   'Resolved': <CheckCircle className="h-5 w-5 text-green-500" />,
   'SLA': <AlertTriangle className="h-5 w-5 text-red-500" />,
 };
+
+const statusStageLegend = [
+  {
+    status: 'Submitted',
+    description: 'Your report has been received and is awaiting review.',
+    icon: statusIcons['Submitted'],
+  },
+  {
+    status: 'Assigned',
+    description: 'A worker has been assigned and the issue is now scheduled.',
+    icon: statusIcons['Assigned'],
+  },
+  {
+    status: 'In Progress',
+    description: 'Work is underway to resolve the reported issue.',
+    icon: statusIcons['In Progress'],
+  },
+  {
+    status: 'Escalated',
+    description: 'The issue needs higher-level attention due to delay or urgency.',
+    icon: statusIcons['Escalated'],
+  },
+  {
+    status: 'Resolved',
+    description: 'The reported issue has been fixed and closed.',
+    icon: statusIcons['Resolved'],
+  },
+];
+
+function IssueStatusLegend() {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4">
+      <div className="mb-4">
+        <p className="text-sm font-semibold">Status Timeline Legend</p>
+        <p className="text-xs text-muted-foreground">
+          Understand each stage of the issue resolution process.
+        </p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {statusStageLegend.map((item) => (
+          <div key={item.status} className="flex gap-3 rounded-xl border border-border bg-background p-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              {item.icon}
+            </div>
+            <div>
+              <p className="font-medium">{item.status}</p>
+              <p className="text-sm text-muted-foreground">{item.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function IssueTimeline({ issue, user }: { issue: Issue, user: AppUser | null }) {
     const [isUpdating, setIsUpdating] = useState(false);
@@ -54,6 +112,7 @@ export function IssueTimeline({ issue, user }: { issue: Issue, user: AppUser | n
         <CardTitle>Progress & Updates</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        <IssueStatusLegend />
         <div className="relative pl-6">
           <div className="absolute left-[11.5px] top-0 h-full w-0.5 bg-border" />
           {issue.updates.map((update, index) => (
@@ -146,7 +205,7 @@ function UpdateForm({ issueId, onCancel, onUpdateAdded }: { issueId: string, onC
         <div className="p-4 border-t space-y-4">
             <h4 className="font-semibold">Add New Update / Remark</h4>
             <div className="grid gap-4">
-                <Select value={status} onValueChange={(value) => setStatus(value as IssueStatus)}>
+                <Select value={status} onValueChange={(value: string) => setStatus(value as IssueStatus)}>
                     <SelectTrigger>
                         <SelectValue placeholder="Select new status" />
                     </SelectTrigger>
@@ -158,12 +217,12 @@ function UpdateForm({ issueId, onCancel, onUpdateAdded }: { issueId: string, onC
                 <Textarea 
                     placeholder="Add a description of the update or a remark for any delays..." 
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
                 />
                 <Input 
                     type="file" 
                     accept="image/*" 
-                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setImageFile(e.target.files?.[0] || null)}
                 />
             </div>
             <div className="flex justify-end gap-2">
