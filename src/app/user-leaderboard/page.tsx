@@ -25,6 +25,7 @@ import { useState, useEffect } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useLanguage } from '@/hooks/use-language';
 import { useAuth } from '@/hooks/use-auth';
+import { BackButton } from '@/components/ui/back-button';
 
 type UserStats = {
   uid: string;
@@ -121,6 +122,9 @@ export default function UserLeaderboardPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      <div className="mb-4">
+        <BackButton href="/dashboard">Back</BackButton>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-headline flex items-center gap-2">

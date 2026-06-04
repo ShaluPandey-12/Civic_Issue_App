@@ -7,9 +7,7 @@ import type { Issue } from '@/lib/types';
 import { notFound, useParams } from 'next/navigation';
 import { IssueDetails } from '@/components/issue-details';
 import { IssueTimeline } from '@/components/issue-timeline';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { BackButton } from '@/components/ui/back-button';
 import { useAuth } from '@/hooks/use-auth';
 
 export default function IssueDetailPage() {
@@ -52,12 +50,9 @@ export default function IssueDetailPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <Button asChild variant="outline" size="sm" className="mb-4 gap-2">
-            <Link href="/dashboard">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Dashboard
-            </Link>
-        </Button>
+        <div className="mb-4">
+          <BackButton href="/dashboard">Back to Dashboard</BackButton>
+        </div>
         <IssueDetails issue={issue} />
       </div>
       <IssueTimeline issue={issue} user={user} />

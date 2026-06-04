@@ -24,6 +24,7 @@ import type { Issue, Worker } from '@/lib/types';
 import { useState, useEffect } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useLanguage } from '@/hooks/use-language';
+import { BackButton } from '@/components/ui/back-button';
 
 type WorkerStats = {
   id: string;
@@ -101,6 +102,9 @@ export default function WorkerLeaderboardPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
+      <div className="mb-4">
+        <BackButton href="/dashboard">Back</BackButton>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-headline flex items-center gap-2">
