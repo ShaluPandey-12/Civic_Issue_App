@@ -41,6 +41,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Camera,
+  X,
 } from 'lucide-react';
 import Image from 'next/image';
 import type { AppUser, IssueCategory, EmergencyCategory, Issue } from '@/lib/types';
@@ -125,6 +126,12 @@ export function ReportIssueForm({
     setAiCheckMessage(null);
     setIsDuplicate(false);
     form.clearErrors('photoDataUri');
+  };
+
+  const clearImage = () => {
+  setImagePreview(null);
+  form.setValue('photoDataUri', '', { shouldValidate: true });
+  resetAiChecks();
   };
 
   const processImage = (file: File) => {
@@ -275,13 +282,24 @@ export function ReportIssueForm({
                     />
                     <div className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg">
                       {imagePreview ? (
-                        <Image
-                          src={imagePreview}
-                          alt="Preview"
-                          width={200}
-                          height={192}
-                          className="object-cover h-full w-full rounded-lg"
-                        />
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={imagePreview}
+                            alt="Preview"
+                            width={200}
+                            height={192}
+                            className="object-cover h-full w-full rounded-lg"
+                          />
+                          <button
+                            type="button" // CRITICAL: Ensures clicking this doesn't accidentally trigger form submission
+                            onClick={clearImage}
+                            disabled={isSubmitting || isAiChecking}
+                            className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 hover:bg-background text-muted-foreground hover:text-foreground border shadow-sm transition-all backdrop-blur-sm z-10"
+                            title="Remove photo"
+                          >
+                            <X className="h-4 w-4" />
+                              </button>
+                        </div>
                       ) : (
                         <div className="flex flex-col items-center justify-center text-center p-4">
                           <ImageIcon className="w-10 h-10 mb-3 text-muted-foreground" />
