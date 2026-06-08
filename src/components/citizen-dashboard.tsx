@@ -113,7 +113,7 @@ export function CitizenDashboard() {
                         className="text-center p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-all flex flex-col items-center justify-center shadow-sm"
                     >
                         <div className="text-primary mb-2">{icon}</div>
-                        <h3 className="font-semibold text-sm">{t(category.split(' & ')[0].trim().toLowerCase().replace(/ /g, '_'))}</h3>
+                        <h3 className="font-semibold text-sm">{category}</h3>
                         <p className="text-xs text-muted-foreground mt-1">{t(description.toLowerCase().replace(/, /g, '_').replace(/ /g, '_'))}</p>
                     </button>
                 ))}
