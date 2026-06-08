@@ -12,6 +12,12 @@ import { Globe, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/use-language';
 import { languages } from '@/hooks/use-language';
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipProvider,
+} from '@/components/ui/tooltip';
 
 
 export function LanguageSwitcher() {
@@ -30,16 +36,25 @@ export function LanguageSwitcher() {
 
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger asChild>
-                <Button
-                    variant="default"
-                    size="icon"
-                    className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300"
-                    aria-label="Open language switcher"
-                >
-                    <Globe className="h-6 w-6" />
-                </Button>
-            </PopoverTrigger>
+                                <TooltipProvider delayDuration={200}>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="default"
+                                                    size="icon"
+                                                    className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300"
+                                                    aria-label="Open language switcher"
+                                                >
+                                                    <Globe className="h-6 w-6" />
+                                                </Button>
+                                            </PopoverTrigger>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="left" align="center" sideOffset={6} className="text-xs md:text-sm px-2 py-1.5">
+                                            {t('Languages') || 'Open language switcher'}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
             <PopoverContent className="w-48 mr-4 mb-2 p-1" side="top" align="end">
                  <div className="grid gap-1">
                     {languages.map((lang) => (
