@@ -104,6 +104,8 @@ export function ReportIssueForm({
   const [aiCheckStatus, setAiCheckStatus] = useState<'idle' | 'checking' | 'complete'>('idle');
   const [aiCheckMessage, setAiCheckMessage] = useState<string | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
+  const [manualLocation, setManualLocation] = useState('');
+  const [locationRequired, setLocationRequired] = useState(false);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -149,7 +151,7 @@ export function ReportIssueForm({
         },
         () => {
           setAiCheckStatus('complete');
-          form.setError('photoDataUri', { type: 'manual', message: 'Could not get location. Please enable location services.' });
+          setLocationRequired(true);
           toast({
             variant: 'destructive',
             title: 'Location Error',
@@ -232,7 +234,20 @@ export function ReportIssueForm({
     setIsSubmitting(true);
     
     try {
-        const newIssue = await addIssue({ ...(data as any), isEmergency }, user);
+        const issueData = {
+  ...(data as any),
+  isEmergency,
+};
+
+if (locationRequired && manualLocation.trim()) {
+  issueData.location = {
+    lat: 0,
+    lng: 0,
+    address: manualLocation,
+  };
+}
+
+const newIssue = await addIssue(issueData, user);
         toast({
         title: 'Report Submitted!',
         description: isEmergency ? 'Your emergency report has been prioritized.' : 'Thank you for helping improve your community.',
@@ -348,7 +363,19 @@ export function ReportIssueForm({
               </FormItem>
             )}
           />
-
+          {locationRequired && (
+            <div className="space-y-2">
+              <FormLabel>Manual Location</FormLabel>
+              <Input
+                placeholder="Enter address, landmark, or area"
+                value={manualLocation}
+                onChange={(e) => setManualLocation(e.target.value)}
+              />
+              <p className="text-sm text-muted-foreground">
+                Location services are unavailable. Please enter the issue location manually.
+              </p>
+            </div>
+              )}
           <FormField
             control={form.control}
             name="description"
