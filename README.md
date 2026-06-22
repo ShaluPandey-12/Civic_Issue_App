@@ -106,3 +106,4 @@ You can use the following pre-seeded accounts to log in and test the different r
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
