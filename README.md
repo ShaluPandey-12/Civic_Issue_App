@@ -1,6 +1,5 @@
 # CivicSolve: See it. Snap it. Solve it. Together.
 
-
 **CivicSolve** is a modern, AI-powered web application designed to bridge the gap between citizens and their local government, creating a transparent and efficient ecosystem for resolving civic issues.
 
 ## The Vision
