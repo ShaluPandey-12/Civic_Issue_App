@@ -11,6 +11,12 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Phone, X } from 'lucide-react';
 import { Separator } from './ui/separator';
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipProvider,
+} from '@/components/ui/tooltip';
 
 const customerCareNumbers = [
     { label: 'Toll-Free', number: '1800-425-8828' },
@@ -24,16 +30,23 @@ export function CustomerCareButton() {
 
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger asChild>
-                <Button
-                    variant="default"
-                    size="icon"
-                    className="fixed bottom-24 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300"
-                    aria-label="Open customer care contacts"
-                >
-                    <Phone className="h-6 w-6" />
-                </Button>
-            </PopoverTrigger>
+                        <TooltipProvider delayDuration={200}>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="default"
+                                            size="icon"
+                                            className="fixed bottom-24 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300"
+                                            aria-label="Open customer care contacts"
+                                        >
+                                            <Phone className="h-6 w-6" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                </TooltipTrigger>
+                                <TooltipContent side="left" align="center" sideOffset={6} className="text-xs md:text-sm px-2 py-1.5">Customer care</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
             <PopoverContent className="w-80 mr-4 mb-2" side="top" align="end">
                  <div className="grid gap-4">
                     <div className="space-y-2">
